@@ -110,3 +110,7 @@
 
         # Get golang into our PATH so we can run e2e.go
         export PATH="${{PATH}}:/usr/local/go/bin"
+
+        # e2e image tag overrider. default is using latest dated e2e-1.5
+        export E2E_IMAGE_1.4_TAG="1.4-v20161101-c3cbd9d-dirty"
+        export E2E_IMAGE_1.5_TAG="1.5-v20161101-c3cbd9d-dirty"
