@@ -18,13 +18,13 @@ set -o nounset
 set -o pipefail
 set -o xtrace
 
-export OWNER='pszczesniak@google.com'
+export OWNER="pszczesniak@google.com"
 # PROJECT="ci-heapster-does-not-use-a-project"
 TARGET="kubernetes/heapster:canary"
 FILE="deploy/docker/canary/Dockerfile"
 docker build -t "${TARGET}" --no-cache=true --pull=true --file="${FILE}" .
 docker inspect "${TARGET}"
-if [[ "$(docker version --format='{{.Client.Version}}')" =~ ^1.9 ]]; then
+if [[ "$(docker version --format="{{.Client.Version}}")" =~ ^1.9 ]]; then
   DOCKER_EMAIL="--email=not@val.id"
 else
   DOCKER_EMAIL=

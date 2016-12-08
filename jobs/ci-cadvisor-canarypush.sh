@@ -18,13 +18,13 @@ set -o nounset
 set -o pipefail
 set -o xtrace
 
-export OWNER='stclair@google.com'
+export OWNER="stclair@google.com"
 # PROJECT="ci-cadvisor-does-not-use-a-project"
 TARGET="google/cadvisor:canary"
 FILE="deploy/canary/Dockerfile"
 docker build -t "${TARGET}" --no-cache=true --pull=true --file="${FILE}" .
 docker inspect "${TARGET}"
-if [[ "$(docker version --format='{{.Client.Version}}')" =~ ^1.9 ]]; then
+if [[ "$(docker version --format="{{.Client.Version}}")" =~ ^1.9 ]]; then
   DOCKER_EMAIL="--email=not@val.id"
 else
   DOCKER_EMAIL=

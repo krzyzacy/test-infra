@@ -18,7 +18,7 @@ set -o nounset
 set -o pipefail
 set -o xtrace
 
-if [[ "${HOSTNAME}" == 'jenkins-master' || "${HOSTNAME}" == 'pull-jenkins-master' ]]; then
+if [[ "${HOSTNAME}" == "jenkins-master' || "${HOSTNAME}" == 'pull-jenkins-master" ]]; then
   sudo gcloud components update
   sudo gcloud components update beta
   sudo gcloud components update alpha
