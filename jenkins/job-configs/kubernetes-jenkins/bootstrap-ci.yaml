@@ -860,8 +860,8 @@
         timeout: 0
         json: 0
         trigger-job: 'ci-kubernetes-build'
-    - kubernetes-e2e-gci-docker:
-        job-name: ci-kubernetes-e2e-gci-docker
+    - kubernetes-e2e-gce-gci-docker:
+        job-name: ci-kubernetes-e2e-gce-gci-docker
         timeout: 0
         frequency: 'H H/6 * * *'
         json: 0
