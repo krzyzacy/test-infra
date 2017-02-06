@@ -61,6 +61,8 @@ def main(args):
 
     # dockerized-e2e-runner goodies setup
     workspace = os.environ.get('WORKSPACE', os.getcwd())
+    if not os.path.basename(workspace) == 'kubernetes':
+        raise ValueError(workspace)
     artifacts = '%s/_artifacts' % workspace
     if not os.path.isdir(artifacts):
         os.makedirs(artifacts)
@@ -78,6 +80,13 @@ def main(args):
       '-v', '%s/_artifacts:/workspace/_artifacts' % workspace,
       '-v', '/etc/localtime:/etc/localtime:ro'
     ]
+
+    if args.docker_in_docker:
+        cmd.extend([
+          '-v', '/var/run/docker.sock:/var/run/docker.sock',
+          '-v', '%s:/go/src/k8s.io/kubernetes' % workspace,
+          '-e', 'REPO_DIR=%s' % workspace,
+          '-e', 'HOST_ARTIFACTS_DIR=%s' % artifacts])
 
     # Rules for env var priority here in docker:
     # -e FOO=a -e FOO=b -> FOO=b
@@ -159,12 +168,10 @@ if __name__ == '__main__':
         '--gce-ssh',
         default=os.environ.get('JENKINS_GCE_SSH_PRIVATE_KEY_FILE'),
         help='Path to .ssh/google_compute_engine keys')
-
     PARSER.add_argument(
         '--gce-pub',
         default=os.environ.get('JENKINS_GCE_SSH_PUBLIC_KEY_FILE'),
         help='Path to pub gce ssh key')
-
     PARSER.add_argument(
         '--service-account',
         default=os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'),
@@ -181,6 +188,8 @@ if __name__ == '__main__':
         '--cluster', default='bootstrap-e2e', help='Name of the cluster')
     PARSER.add_argument(
         '--tag', default='v20170104-9031f1d', help='Use a specific kubekins-e2e tag if set')
+    PARSER.add_argument(
+        '--docker-in-docker', help='Enable run docker within docker')
     ARGS = PARSER.parse_args()
 
     CONTAINER = '%s-%s' % (os.environ.get('JOB_NAME'), os.environ.get('BUILD_NUMBER'))

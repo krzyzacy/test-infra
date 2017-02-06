@@ -1272,7 +1272,6 @@ class JobTest(unittest.TestCase):
             'kubernetes-e2e-(kops|aws)',
             'kubernetes-e2e-garbage',
             'kubernetes-e2e-gci-docker',
-            'kubernetes-kubemark',
             'kubernetes-e2e-gce-enormous',
             'kubernetes-e2e-gke-large',
             'kubernetes-e2e-[0-9a-z-._]*-skew$',
@@ -1528,10 +1527,10 @@ class JobTest(unittest.TestCase):
     def testAllProjectAreUnique(self):
         allowed_list = {
             # TODO(fejta): remove these (found while migrating jobs)
-            'ci-kubernetes-kubemark-100-gce.sh': 'ci-kubernetes-kubemark-*',
-            'ci-kubernetes-kubemark-5-gce.sh': 'ci-kubernetes-kubemark-*',
-            'ci-kubernetes-kubemark-high-density-100-gce.sh': 'ci-kubernetes-kubemark-*',
-            'ci-kubernetes-kubemark-gce-scale.sh': 'ci-kubernetes-scale-*',
+            'ci-kubernetes-kubemark-100-gce.env': 'ci-kubernetes-kubemark-*',
+            'ci-kubernetes-kubemark-5-gce.env': 'ci-kubernetes-kubemark-*',
+            'ci-kubernetes-kubemark-high-density-100-gce.env': 'ci-kubernetes-kubemark-*',
+            'ci-kubernetes-kubemark-gce-scale.env': 'ci-kubernetes-scale-*',
             'ci-kubernetes-e2e-gce-enormous-cluster.sh': 'ci-kubernetes-scale-*',
             'ci-kubernetes-e2e-gce-enormous-deploy.sh': 'ci-kubernetes-scale-*',
             'ci-kubernetes-e2e-gce-enormous-teardown.sh': 'ci-kubernetes-scale-*',
