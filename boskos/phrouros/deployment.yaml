@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: phrouros
+  labels:
+    app: phrouros
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: phrouros
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: phrouros
+        image: gcr.io/k8s-testimages/phrouros:0.1
+        imagePullPolicy: Always
