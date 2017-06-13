@@ -4509,7 +4509,7 @@ periodics:
         defaultMode: 256
         secretName: ssh-key-secret
 
-- interval: 2h
+- interval: 30m
   name: ci-kubernetes-e2e-gce-gci-qa-m58
   spec:
     containers:
