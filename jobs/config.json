@@ -10467,5 +10467,16 @@
     "sigOwners": [
       "sig-testing"
     ]
+  },
+  "sample-hello-world": {
+    "args": [
+      "echo",
+      "--",
+      "hello world"
+    ],
+    "scenario": "execute",
+    "sigOwners": [
+      "sig-testing"
+    ]
   }
 }

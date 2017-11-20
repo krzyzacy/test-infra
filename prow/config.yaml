@@ -20629,3 +20629,22 @@ periodics:
     - name: service
       secret:
         secretName: service-account
+
+- interval: 1h
+  agent: kubernetes
+  name: sample-hello-world
+  spec:
+    containers:
+    - image: gcr.io/k8s-testimages/kubekins-e2e:latest-master
+      imagePullPolicy: Always
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: /etc/service-account/service-account.json
+      volumeMounts:
+      - name: service
+        mountPath: /etc/service-account
+        readOnly: true
+    volumes:
+    - name: service
+      secret:
+        secretName: service-account
