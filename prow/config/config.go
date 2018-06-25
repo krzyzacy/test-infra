@@ -260,7 +260,7 @@ type Branding struct {
 }
 
 // Load loads and parses the config at path.
-func Load(prowConfig, jobConfig string) (*Config, error) {
+func Load(prowConfig, jobConfig string, recursive bool) (*Config, error) {
 	stat, err := os.Stat(prowConfig)
 	if err != nil {
 		return nil, err
@@ -310,6 +310,9 @@ func Load(prowConfig, jobConfig string) (*Config, error) {
 		}
 
 		if info.IsDir() {
+			if !recursive {
+				return filepath.SkipDir
+			}
 			return nil
 		}
 

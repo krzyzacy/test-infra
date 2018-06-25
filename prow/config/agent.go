@@ -34,8 +34,8 @@ type Agent struct {
 // Start will begin polling the config file at the path. If the first load
 // fails, Start with return the error and abort. Future load failures will log
 // the failure message but continue attempting to load.
-func (ca *Agent) Start(prowConfig, jobConfig string) error {
-	c, err := Load(prowConfig, jobConfig)
+func (ca *Agent) Start(prowConfig, jobConfig string, recursive bool) error {
+	c, err := Load(prowConfig, jobConfig, recursive)
 	if err != nil {
 		return err
 	}
@@ -77,7 +77,7 @@ func (ca *Agent) Start(prowConfig, jobConfig string) error {
 				}
 				lastModTime = recentModTime
 			}
-			if c, err := Load(prowConfig, jobConfig); err != nil {
+			if c, err := Load(prowConfig, jobConfig, recursive); err != nil {
 				logrus.WithField("prowConfig", prowConfig).
 					WithField("jobConfig", jobConfig).
 					WithError(err).Error("Error loading config.")
