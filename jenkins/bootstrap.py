@@ -210,12 +210,13 @@ def repository(repo, ssh):
         repo = 'github.com/kubernetes-sigs/%s' % (repo[len('sigs.k8s.io/'):])
     elif repo.startswith('istio.io/'):
         repo = 'github.com/istio/%s' % (repo[len('istio.io/'):])
-    if ssh:
-        if ":" not in repo:
-            parts = repo.split('/', 1)
-            repo = '%s:%s' % (parts[0], parts[1])
-        return 'git@%s' % repo
-    return 'https://%s' % repo
+    if 'amazonaws' not in repo or not ssh:
+        return 'https://%s' % repo
+
+    if ":" not in repo:
+        parts = repo.split('/', 1)
+        repo = '%s:%s' % (parts[0], parts[1])
+    return 'git@%s' % repo
 
 
 def random_sleep(attempt):
