@@ -14,9 +14,11 @@ postsubmits:
       - name: third
         image: busybox
         args: ["cat", "config/jobs/kubernetes/test-infra/test-infra-postsubmits.yaml"]
+
   - name: ci-test-infra-bazel
     branches:
     - master
+    decorate: true
     labels:
       preset-service-account: "true"
       preset-bazel-scratch-dir: "true"
@@ -24,13 +26,10 @@ postsubmits:
     spec:
       containers:
       - image: gcr.io/k8s-testimages/kubekins-e2e:v20190110-49573aea5-experimental
+        command:
+        - runner.sh
+        - ./scenarios/kubernetes_bazel.py
         args:
-        - "--job=$(JOB_NAME)"
-        - "--repo=k8s.io/$(REPO_NAME)=$(PULL_REFS)"
-        - --service-account=/etc/service-account/service-account.json
-        - --upload=gs://kubernetes-jenkins/logs
-        - --scenario=kubernetes_bazel
-        - -- # end bootstrap args, scenario args below
         - --build=//...
         - --install=gubernator/test_requirements.txt
         - --test=//...
@@ -45,18 +44,15 @@ postsubmits:
   - name: maintenance-boskos-config-upload
     branches:
     - master
+    decorate: true
     labels:
       preset-service-account: "true"
     spec:
       containers:
       - image: gcr.io/k8s-testimages/kubekins-e2e:v20190110-49573aea5-experimental
+        command:
+        - runner.sh
         args:
-        - "--job=$(JOB_NAME)"
-        - "--repo=k8s.io/$(REPO_NAME)=$(PULL_REFS)"
-        - --service-account=/etc/service-account/service-account.json
-        - --upload=gs://kubernetes-jenkins/logs
-        - --scenario=execute
-        - --
         - ./boskos/update_prow_config.sh
         env:
         - name: PROW_SERVICE_ACCOUNT
@@ -79,13 +75,9 @@ postsubmits:
     spec:
       containers:
       - image: gcr.io/k8s-testimages/kubekins-e2e:v20190110-49573aea5-experimental
+        command:
+        - runner.sh
         args:
-        - "--job=$(JOB_NAME)"
-        - "--repo=k8s.io/$(REPO_NAME)=$(PULL_REFS)"
-        - --service-account=/etc/service-account/service-account.json
-        - --upload=gs://kubernetes-jenkins/logs
-        - --scenario=execute
-        - --
         - ./testgrid/config-upload.sh
         resources:
           requests:
