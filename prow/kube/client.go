@@ -145,7 +145,7 @@ type request struct {
 }
 
 func (c *Client) request(r *request, ret interface{}) error {
-	out, err := c.requestRetry(r)
+	out, err := c.requestRetry(r, false)
 	if err != nil {
 		return err
 	}
@@ -167,8 +167,13 @@ func (c *Client) retry(r *request) (*http.Response, error) {
 			if resp.StatusCode < 500 {
 				break
 			}
+			bodyBytes, err := ioutil.ReadAll(resp.Body)
+		    if err == nil {
+				c.log(fmt.Sprintf("server reply %d, response body: %s", resp.StatusCode, string(bodyBytes)))
+		    }
 			resp.Body.Close()
 		}
+
 
 		time.Sleep(backoff)
 		backoff *= 2
@@ -229,10 +234,17 @@ func (c *Client) doRequest(method, deckPath, urlPath, contentType string, query 
 	}
 	var buf io.Reader
 	if body != nil {
-		b, err := json.Marshal(body)
-		if err != nil {
-			return nil, err
+		var b []byte
+		var merr error
+		if method == http.MethodPatch {
+			b = body.([]byte)
+		} else {
+			b, merr = json.Marshal(body)
+			if merr != nil {
+				return nil, merr
+			}
 		}
+		
 		buf = bytes.NewBuffer(b)
 	}
 	req, err := http.NewRequest(method, url, buf)
@@ -533,11 +545,11 @@ func (c *Client) ReplaceProwJob(name string, job prowapi.ProwJob) (prowapi.ProwJ
 func (c *Client) PatchProwJob(name string, patch []byte) (prowapi.ProwJob, error) {
 	c.log("PatchProwJob", name, string(patch))
 	var retJob prowapi.ProwJob
-	err := c.request(&request{
+	err := c.requestWithLog(&request{
 		method:      http.MethodPatch,
 		contentType: "application/merge-patch+json",
 		path:        fmt.Sprintf("/apis/prow.k8s.io/v1/namespaces/%s/prowjobs/%s", c.namespace, name),
-		requestBody: &patch,
+		requestBody: patch,
 	}, &retJob)
 	return retJob, err
 }

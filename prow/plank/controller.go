@@ -585,7 +585,6 @@ func (c *Controller) patchProwjob(srcPJ prowapi.ProwJob, destPJ prowapi.ProwJob)
 	}
 
 	logrus.Infof("Created merge patch: %v", string(patch))
-
 	_, err = c.kc.PatchProwJob(srcPJ.Name, patch)
 	return err
 }
