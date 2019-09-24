@@ -84,7 +84,7 @@ func (c *Controller) Run(ctx context.Context) {
 	c.informer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
 		AddFunc: func(obj interface{}) {
 			key, err := cache.MetaNamespaceKeyFunc(obj)
-			logrus.WithField("prowjob", key).Debug("Add prowjob")
+			//logrus.WithField("prowjob", key).Debug("Add prowjob")
 			if err != nil {
 				logrus.WithError(err).Error("Cannot get key from object meta")
 				return
@@ -93,7 +93,7 @@ func (c *Controller) Run(ctx context.Context) {
 		},
 		UpdateFunc: func(oldObj, newObj interface{}) {
 			key, err := cache.MetaNamespaceKeyFunc(newObj)
-			logrus.WithField("prowjob", key).Debug("Update prowjob")
+			//logrus.WithField("prowjob", key).Debug("Update prowjob")
 			if err != nil {
 				logrus.WithError(err).Error("Cannot get key from object meta")
 				return
@@ -135,6 +135,8 @@ func (c *Controller) HasSynced() bool {
 // runWorker executes the loop to process new items added to the queue.
 func (c *Controller) runWorker() {
 	c.wg.Add(1)
+	logrus.WithField("reporter", c.reporter.GetName().Debug("new processNextItem loop!")
+	logrus.WithField("reporter", c.reporter.GetName().Debugf("Queue Size: %d", c.queue.Size())
 	for c.processNextItem() {
 	}
 	c.wg.Done()
@@ -220,8 +222,6 @@ func (c *Controller) processNextItem() bool {
 
 	// assert the string out of the key (format `namespace/name`)
 	keyRaw := key.(string)
-	logrus.WithField("key", keyRaw).Debug("processing next key")
-
 	namespace, name, err := cache.SplitMetaNamespaceKey(keyRaw)
 	if err != nil {
 		logrus.WithError(err).WithField("prowjob", keyRaw).Error("invalid resource key")
